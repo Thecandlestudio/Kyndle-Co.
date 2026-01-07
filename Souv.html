@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kyndle & Co | Souvernirs</title>
+<title>Kyndle & Co | Souvenirs</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -12,6 +12,10 @@
   --cream:#F8F2E9;
   --accent:#987070;
   --dark:#301901ed;
+
+  --line: rgba(48,25,1,.16);
+  --shadow: 0 12px 30px rgba(0,0,0,.18);
+  --radius: 18px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -28,16 +32,25 @@ header{
   justify-content:space-between;
   align-items:center;
   border-bottom:1px solid #e6ddd2;
+  gap:14px;
 }
 
 header h1{
   font-family:Playfair Display,serif;
   color:var(--accent);
   font-size:28px;
+  white-space:nowrap;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
 nav a{
-  margin-left:30px;
   color:var(--accent);
   font-weight:500;
   text-decoration:none;
@@ -61,6 +74,7 @@ section{padding:60px 40px}
   box-shadow:0 10px 25px rgba(0,0,0,.06);
   text-align:center;
   padding-bottom:25px;
+  overflow:hidden;
 }
 
 .card img{width:100%;height:260px;object-fit:cover}
@@ -77,83 +91,242 @@ section{padding:60px 40px}
   cursor:pointer;
 }
 
-/* MINI CART */
-.cart{
-  position:fixed;
-  top:20px;
-  right:20px;
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
-  width:260px;
-  display:none; /* hidden until items exist */
-}
-
-.cart h4{font-family:Playfair Display,serif}
-
-.cart-controls{
-  display:flex;
+/* ---------- HEADER CART PILL (like upload) ---------- */
+.cart-pill{
+  display:inline-flex;
+  align-items:center;
   gap:10px;
-  margin:10px 0 10px;
-}
-
-.hide-cart{
-  flex:1;
-  background:#e9e1d8;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.75);
   color:var(--dark);
-  border:0;
-  padding:10px;
-  border-radius:20px;
+  font-weight:700;
   cursor:pointer;
 }
 
-.go-to-cart{
-  width:100%;
-  margin-bottom:10px;
-  background:var(--accent);
-  color:#fff;
-  border:0;
-  padding:10px;
-  border-radius:20px;
-  cursor:pointer;
+.cart-count{
+  display:inline-flex;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:rgba(152,112,112,.14);
+  border:1px solid rgba(152,112,112,.22);
+  color:var(--accent);
+  font-weight:900;
+  font-size:12px;
+  line-height:1;
 }
 
-.cart-item{
+/* ---------- CART DRAWER (like upload) ---------- */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+  z-index:90;
+}
+.overlay.open{opacity:1; pointer-events:auto;}
+
+.cart-drawer{
+  position:fixed;
+  top:0;
+  right:-420px;
+  width:min(420px, 92vw);
+  height:100vh;
+  background:rgba(255,255,255,.96);
+  border-left:1px solid var(--line);
+  box-shadow:-18px 0 40px rgba(0,0,0,.18);
+  z-index:100;
+  transition:right .25s ease;
+  display:flex;
+  flex-direction:column;
+  backdrop-filter: blur(10px);
+}
+.cart-drawer.open{ right:0; }
+
+.cart-head{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--line);
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  font-size:14px;
-  margin-bottom:8px;
 }
 
-.cart-item .left{
-  flex:1;
-  min-width:0;
+.cart-title{
+  margin:0;
+  font-size:16px;
+  font-weight:900;
+  color:var(--dark);
+  letter-spacing:.02em;
 }
 
-.remove-btn{
-  border:none;
-  background:#f36a6a;
-  color:#fff;
-  border-radius:8px;
-  padding:2px 8px;
+.close-btn{
+  border:1px solid var(--line);
+  background:rgba(152,112,112,.18);
+  color:var(--dark);
+  border-radius:999px;
+  padding:8px 10px;
+  font-weight:900;
   cursor:pointer;
-  line-height:1.2;
 }
 
+.cart-body{
+  padding:12px 14px;
+  overflow:auto;
+  flex:1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.empty{
+  border:1px dashed rgba(48,25,1,.22);
+  border-radius:14px;
+  padding:14px;
+  color:rgba(48,25,1,.75);
+  background:rgba(152,112,112,.08);
+  font-weight:700;
+}
+
+.cart-item{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+  padding:12px;
+  border:1px solid rgba(48,25,1,.14);
+  border-radius:16px;
+  background:rgba(152,112,112,.08);
+  margin-bottom:10px;
+}
+
+.ci-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.ci-name{
+  margin:0;
+  font-weight:900;
+  color:var(--dark);
+  font-size:14px;
+  line-height:1.2;
+  flex:1;
+}
+
+.ci-price{
+  font-weight:900;
+  color:var(--accent);
+  white-space:nowrap;
+  font-size:14px;
+}
+
+.ci-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.qty{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid rgba(48,25,1,.18);
+  border-radius:999px;
+  overflow:hidden;
+  background:#fff;
+}
+.qty button{
+  border:0;
+  background:rgba(152,112,112,.16);
+  color:var(--dark);
+  font-weight:900;
+  padding:8px 10px;
+  cursor:pointer;
+}
+.qty span{
+  min-width:34px;
+  text-align:center;
+  font-weight:900;
+  color:var(--dark);
+  padding:0 10px;
+}
+
+.remove{
+  border:0;
+  background:transparent;
+  color:rgba(48,25,1,.75);
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:underline;
+}
+.remove:hover{color:var(--accent);}
+
+.cart-foot{
+  border-top:1px solid var(--line);
+  padding:12px 14px 14px;
+  background:rgba(152,112,112,.10);
+  padding-bottom: calc(14px + env(safe-area-inset-bottom));
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:6px 0;
+  color:var(--dark);
+  font-weight:800;
+}
+.row small{font-weight:700;color:rgba(48,25,1,.75)}
 .total{
-  font-weight:600;
+  font-size:16px;
+  font-weight:900;
+  color:var(--accent);
+}
+
+.cart-buttons{
+  display:grid;
+  gap:10px;
   margin-top:10px;
-  border-top:1px solid #ddd;
-  padding-top:10px;
+}
+
+.drawer-btn{
+  width:100%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 14px;
+  border-radius:14px;
+  border:2px solid rgba(48,25,1,.16);
+  background:#fff;
+  color:var(--dark);
+  font-weight:900;
+  cursor:pointer;
+}
+
+.drawer-btn.primary{
+  background:var(--accent);
+  border-color:rgba(152,112,112,.35);
+  color:#fff;
+}
+.drawer-btn.primary:hover{filter:brightness(.98);}
+
+.drawer-btn.ghost{
+  background:transparent;
+  border:1px solid rgba(48,25,1,.18);
 }
 
 @media(max-width:768px){
   header{padding:20px}
   section{padding:40px 20px}
-  .cart{position:static;margin:20px auto}
 }
 
 /* Footer */
@@ -164,7 +337,6 @@ footer{
   text-align:center;
   font-size:14px;
 }
-
 footer a{color:var(--cream);margin:0 10px}
 </style>
 </head>
@@ -178,6 +350,10 @@ footer a{color:var(--cream);margin:0 10px}
     <a href="explore.html">Collections</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
+
+    <button class="cart-pill" id="openCartBtn" type="button" aria-haspopup="dialog" aria-controls="cartDrawer">
+      🛒<span class="cart-count" id="cartCount">0</span>
+    </button>
   </nav>
 </header>
 
@@ -238,7 +414,7 @@ footer a{color:var(--cream);margin:0 10px}
     </div>
 
     <div class="card">
-      <img src="colflo.png" alt="Colored Flowers">
+      <img src="colflo.png" alt="Colored flowers">
       <h3>Colored Flowers</h3>
       <p>Add a note to your order with name.</p>
       <div class="price">$25</div>
@@ -246,7 +422,7 @@ footer a{color:var(--cream);margin:0 10px}
     </div>
 
     <div class="card">
-      <img src="cloud.png" alt="Mini Clouds Souvenir">
+      <img src="cloud.png" alt="Mini clouds souvenir">
       <h3>Mini Clouds Souvenir</h3>
       <p>Add a note to your order with name.</p>
       <div class="price">$25</div>
@@ -254,7 +430,7 @@ footer a{color:var(--cream);margin:0 10px}
     </div>
 
     <div class="card">
-      <img src="molds.png" alt="Mini Resin Souvenir">
+      <img src="molds.png" alt="Mini resin souvenir">
       <h3>Mini Resin Souvenir</h3>
       <p>Add a note to your order with name.</p>
       <div class="price">$25</div>
@@ -262,7 +438,7 @@ footer a{color:var(--cream);margin:0 10px}
     </div>
 
     <div class="card">
-      <img src="clov.png" alt="Clover Flower Souvenir">
+      <img src="clov.png" alt="Clover flower souvenir">
       <h3>Clover Flower Souvenir</h3>
       <p>Add a note to your order with name.</p>
       <div class="price">$25</div>
@@ -270,7 +446,7 @@ footer a{color:var(--cream);margin:0 10px}
     </div>
 
     <div class="card">
-      <img src="hands.png" alt="Colorful Hands Souvenir">
+      <img src="hands.png" alt="Colorful hands souvenir">
       <h3>Colorful Hands Souvenir</h3>
       <p>Add a note to your order with name.</p>
       <div class="price">$25</div>
@@ -280,95 +456,222 @@ footer a{color:var(--cream);margin:0 10px}
   </div>
 </section>
 
-<!-- MINI CART -->
-<div class="cart">
-  <h4>Your Cart</h4>
+<!-- CART overlay + drawer -->
+<div class="overlay" id="overlay" aria-hidden="true"></div>
 
-  <div class="cart-controls">
-    <button class="hide-cart" onclick="hideCart()">Hide</button>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Shopping cart">
+  <div class="cart-head">
+    <h3 class="cart-title">Your Cart</h3>
+    <button class="close-btn" id="closeCartBtn" type="button" aria-label="Close cart">✕</button>
   </div>
 
-  <button class="go-to-cart" onclick="location.href='mycart.html'">Go to My Cart</button>
-  <div id="cartItems"></div>
-  <div class="total">Total: $<span id="total">0.00</span></div>
-</div>
+  <div class="cart-body">
+    <div class="empty" id="emptyState">
+      Your cart is empty. Click “Add to Cart” on a product to start shopping.
+    </div>
+
+    <div id="cartItems"></div>
+  </div>
+
+  <div class="cart-foot">
+    <div class="row"><small>Items</small> <span id="itemsCount">0</span></div>
+    <div class="row"><small>Subtotal</small> <span class="total" id="subtotal">$0.00</span></div>
+
+    <div class="cart-buttons">
+      <button class="drawer-btn ghost" id="clearCartBtn" type="button">Clear cart</button>
+      <button class="drawer-btn" type="button" onclick="location.href='mycart.html'">Go to My Cart</button>
+      <button class="drawer-btn primary" id="checkoutBtn" type="button">Checkout</button>
+    </div>
+  </div>
+</aside>
 
 <script>
-const CART_KEY = "kyndle_cart";
+/* ===== CART (drawer style like your upload) ===== */
+const CART_KEY = "kyndle_cart_v1";
+let cart = [];
 
-function getCart(){
-  return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+const $ = (sel) => document.querySelector(sel);
+
+const overlay = $("#overlay");
+const drawer = $("#cartDrawer");
+const openCartBtn = $("#openCartBtn");
+const closeCartBtn = $("#closeCartBtn");
+
+const cartCountEl = $("#cartCount");
+const itemsCountEl = $("#itemsCount");
+const subtotalEl = $("#subtotal");
+const cartItemsEl = $("#cartItems");
+const emptyStateEl = $("#emptyState");
+
+const clearCartBtn = $("#clearCartBtn");
+const checkoutBtn = $("#checkoutBtn");
+
+function loadCart(){
+  try{
+    const raw = localStorage.getItem(CART_KEY);
+    cart = raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(cart)) cart = [];
+  }catch{
+    cart = [];
+  }
 }
 
-function setCart(cart){
+function saveCart(){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function addToCart(name, price){
-  const cart = getCart();
-  const existing = cart.find(i => i.name === name);
-
-  if(existing){
-    existing.qty += 1;
-  }else{
-    cart.push({ name, price, qty: 1 });
-  }
-
-  setCart(cart);
-  updateMiniCart();
+function money(n){
+  return "$" + Number(n).toFixed(2);
 }
 
-function removeFromCart(index){
-  const cart = getCart();
-  cart.splice(index, 1);
-  setCart(cart);
-  updateMiniCart();
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function updateMiniCart(){
-  const cartEl = document.querySelector(".cart");
-  const cartItemsEl = document.getElementById("cartItems");
-  const totalEl = document.getElementById("total");
+function totals(){
+  const items = cart.reduce((sum, it) => sum + it.qty, 0);
+  const subtotal = cart.reduce((sum, it) => sum + (it.qty * it.price), 0);
 
-  const cart = getCart();
+  cartCountEl.textContent = String(items);
+  itemsCountEl.textContent = String(items);
+  subtotalEl.textContent = money(subtotal);
 
-  // show/hide cart depending on items
-  if(cart.length === 0){
-    cartEl.style.display = "none";
-    cartItemsEl.innerHTML = "";
-    totalEl.textContent = "0.00";
-    return;
-  }else{
-    cartEl.style.display = "block";
-  }
+  emptyStateEl.style.display = cart.length ? "none" : "block";
+}
 
+function renderCart(){
   cartItemsEl.innerHTML = "";
-  let total = 0;
 
-  cart.forEach((it, index) => {
-    total += it.qty * it.price;
-
+  cart.forEach((it) => {
     const row = document.createElement("div");
     row.className = "cart-item";
+    row.dataset.name = it.name; // identifier
 
     row.innerHTML = `
-      <div class="left">${it.qty} × ${it.name}</div>
-      <div>$${(it.qty * it.price).toFixed(2)}</div>
-      <button class="remove-btn" onclick="removeFromCart(${index})">x</button>
+      <div class="ci-top">
+        <p class="ci-name">${escapeHtml(it.name)}</p>
+        <div class="ci-price">${money(it.price)}</div>
+      </div>
+
+      <div class="ci-actions">
+        <div class="qty" aria-label="Quantity controls">
+          <button type="button" data-action="dec" aria-label="Decrease quantity">−</button>
+          <span>${it.qty}</span>
+          <button type="button" data-action="inc" aria-label="Increase quantity">+</button>
+        </div>
+
+        <div style="font-weight:900;color:var(--accent);">
+          ${money(it.qty * it.price)}
+        </div>
+
+        <button class="remove" type="button" data-action="remove">Remove</button>
+      </div>
     `;
 
     cartItemsEl.appendChild(row);
   });
 
-  totalEl.textContent = total.toFixed(2);
+  totals();
 }
 
-function hideCart(){
-  document.querySelector(".cart").style.display = "none";
+function openCart(){
+  overlay.classList.add("open");
+  drawer.classList.add("open");
+  overlay.setAttribute("aria-hidden", "false");
 }
 
-// INIT
-updateMiniCart();
+function closeCart(){
+  overlay.classList.remove("open");
+  drawer.classList.remove("open");
+  overlay.setAttribute("aria-hidden", "true");
+}
+
+/* ===== PUBLIC: called by your product buttons ===== */
+function addToCart(name, price){
+  const found = cart.find(x => x.name === name);
+  if(found){
+    found.qty += 1;
+  }else{
+    cart.push({ name, price: Number(price), qty: 1 });
+  }
+
+  saveCart();
+  renderCart();
+
+  // pop up after adding (like upload)
+  openCart();
+}
+
+/* ===== CART ACTIONS ===== */
+function setQty(name, qty){
+  const it = cart.find(x => x.name === name);
+  if(!it) return;
+
+  it.qty = Math.max(1, qty);
+  saveCart();
+  renderCart();
+}
+
+function removeItem(name){
+  cart = cart.filter(x => x.name !== name);
+  saveCart();
+  renderCart();
+}
+
+function clearCart(){
+  cart = [];
+  saveCart();
+  renderCart();
+}
+
+/* ===== EVENTS ===== */
+openCartBtn.addEventListener("click", openCart);
+closeCartBtn.addEventListener("click", closeCart);
+overlay.addEventListener("click", closeCart);
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && drawer.classList.contains("open")) closeCart();
+});
+
+cartItemsEl.addEventListener("click", (e) => {
+  const itemEl = e.target.closest(".cart-item");
+  if(!itemEl) return;
+
+  const btn = e.target.closest("button");
+  if(!btn) return;
+
+  const name = itemEl.dataset.name;
+  const action = btn.dataset.action;
+
+  const it = cart.find(x => x.name === name);
+  if(!it) return;
+
+  if(action === "inc") setQty(name, it.qty + 1);
+  if(action === "dec") setQty(name, it.qty - 1);
+  if(action === "remove") removeItem(name);
+});
+
+clearCartBtn.addEventListener("click", () => {
+  if(confirm("Clear all items from your cart?")) clearCart();
+});
+
+checkoutBtn.addEventListener("click", () => {
+  if(!cart.length){
+    alert("Your cart is empty.");
+    return;
+  }
+  // send them to the cart page (you can customize later)
+  window.location.href = "mycart.html";
+});
+
+/* INIT */
+loadCart();
+renderCart();
 </script>
 
 <footer>
