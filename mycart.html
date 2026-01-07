@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kyndle & Co | My Cart</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --accent:#987070;
+  --cream:#F8F2E9;
+  --dark:#2F2A25;
+  --line:rgba(0,0,0,.12);
+  --card:#fff;
+  --radius:18px;
+  --shadow:0 12px 30px rgba(0,0,0,.12);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Poppins,sans-serif;
+  background:var(--cream);
+  color:var(--dark);
+}
+.container{max-width:1100px;margin:auto;padding:0 16px}
+a{text-decoration:none;color:inherit}
+
+header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(248,242,233,.9);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0;
+}
+.brand{
+  font-family:Playfair Display,serif;
+  font-size:26px;
+  color:var(--accent);
+  font-weight:700;
+}
+.pill{
+  padding:9px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.hero{text-align:center;padding:28px 0;border-bottom:1px solid var(--line)}
+.hero h1{margin:0;font-family:Playfair Display,serif;font-size:32px}
+.hero p{color:var(--accent)}
+
+.layout{
+  display:grid;
+  grid-template-columns:1.4fr .6fr;
+  gap:16px;
+  padding:30px 0;
+}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.head{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#faf7f2;
+  font-weight:700;
+}
+
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;color:#777}
+
+.qty button{
+  border:0;background:#eee;padding:6px 10px;cursor:pointer
+}
+.qty span{padding:0 10px;font-weight:600}
+
+.money{font-weight:700;color:var(--accent)}
+
+.remove-btn{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:6px 12px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.summary{padding:16px}
+.row{display:flex;justify-content:space-between;margin:10px 0;font-weight:600}
+.total{font-size:18px;color:var(--accent)}
+
+.checkout{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border-radius:14px;
+  border:0;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+footer{
+  background:var(--accent);
+  color:var(--cream);
+  text-align:center;
+  padding:24px;
+  margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <a class="brand" href="index.html">Kyndle & Co</a>
+    <button class="pill" onclick="history.back()">← Continue Shopping</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>My Cart</h1>
+    <p>Review your items and proceed to checkout</p>
+  </div>
+</section>
+
+<main class="container">
+  <div class="layout">
+
+    <!-- CART -->
+    <section class="card">
+      <div class="head">
+        Cart Products
+        <button class="pill" id="clearCartBtn">Clear Cart</button>
+      </div>
+      <div id="cartWrap"></div>
+    </section>
+
+    <!-- SUMMARY -->
+    <aside class="card">
+      <div class="head">Order Summary</div>
+      <div class="summary">
+        <div class="row">Items <span id="itemsCount">0</span></div>
+        <div class="row">Total <span class="total" id="subtotal">$0.00</span></div>
+        <button class="checkout" onclick="checkoutToGoogleForm()">Checkout</button>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<footer>
+  © 2026 Kyndle & Co
+</footer>
+
+<script>
+/* ===== CART STORAGE ===== */
+const CART_KEY = "kyndle_cart";
+let cart = [];
+
+function loadCart(){
+  try{
+    cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  }catch{
+    cart = [];
+  }
+}
+
+function saveCart(){
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+/* ===== CART ACTIONS ===== */
+function updateQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty < 1) cart[index].qty = 1;
+  saveCart(); render();
+}
+
+function removeItem(index){
+  cart.splice(index,1);
+  saveCart(); render();
+}
+
+/* ===== RENDER ===== */
+const cartWrap = document.getElementById("cartWrap");
+const itemsCountEl = document.getElementById("itemsCount");
+const subtotalEl = document.getElementById("subtotal");
+
+function render(){
+  if(!cart.length){
+    cartWrap.innerHTML = "<p style='padding:16px'>Your cart is empty.</p>";
+    itemsCountEl.textContent = 0;
+    subtotalEl.textContent = "$0.00";
+    return;
+  }
+
+  cartWrap.innerHTML = `
+    <table>
+      <thead>
+        <tr><th>Product</th><th>Qty</th><th>Total</th><th></th></tr>
+      </thead>
+      <tbody>
+        ${cart.map((it,i)=>`
+          <tr>
+            <td>${it.name}</td>
+            <td class="qty">
+              <button onclick="updateQty(${i},-1)">−</button>
+              <span>${it.qty}</span>
+              <button onclick="updateQty(${i},1)">+</button>
+            </td>
+            <td class="money">$${(it.price*it.qty).toFixed(2)}</td>
+            <td>
+              <button class="remove-btn" onclick="removeItem(${i})">Remove</button>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  const items = cart.reduce((s,i)=>s+i.qty,0);
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  itemsCountEl.textContent = items;
+  subtotalEl.textContent = "$"+total.toFixed(2);
+}
+
+/* ===== CLEAR CART ===== */
+document.getElementById("clearCartBtn").onclick = ()=>{
+  if(confirm("Clear all items from cart?")){
+    cart=[]; saveCart(); render();
+  }
+};
+
+/* ===== GOOGLE FORM CHECKOUT ===== */
+const GOOGLE_FORM_BASE =
+"https://docs.google.com/forms/d/e/1FAIpQLSfg73ce5qYwdNwndsEKygrWnBTKFPWNvf1mAPno3to-0hNFXw/viewform?usp=pp_url";
+
+const ENTRY_ITEMS = "entry.183006576";
+const ENTRY_EMAIL = "entry.1797366849";
+const ENTRY_NOTE  = "entry.1832283266";
+
+function checkoutToGoogleForm(){
+  if(!cart.length){ alert("Cart is empty"); return; }
+
+  const itemsText = cart.map(it =>
+    `${it.qty} x ${it.name} — $${(it.price*it.qty).toFixed(2)}`
+  ).join("\n");
+
+  const email = prompt("Enter your email:");
+
+  const params = new URLSearchParams();
+  params.set(ENTRY_ITEMS, itemsText);
+  params.set(ENTRY_EMAIL, email || "");
+  params.set(ENTRY_NOTE, "Order from website");
+
+  window.location.href = GOOGLE_FORM_BASE + "&" + params.toString();
+}
+
+/* INIT */
+loadCart();
+render();
+</script>
+
+</body>
+</html>

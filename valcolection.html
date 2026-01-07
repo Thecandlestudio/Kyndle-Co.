@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kyndle & Co | Ramadan Items</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#F8F2E9;
+  --accent:#987070;
+  --dark:#301901ed;
+
+  --line: rgba(48,25,1,.16);
+  --shadow: 0 12px 30px rgba(0,0,0,.18);
+  --radius: 18px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Poppins,sans-serif;
+  background:var(--cream);
+  color:var(--dark);
+}
+
+header{
+  padding:20px 60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e6ddd2;
+  gap:14px;
+}
+
+header h1{
+  font-family:Playfair Display,serif;
+  color:var(--accent);
+  font-size:28px;
+  white-space:nowrap;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+nav a{
+  margin-left:0;
+  color:var(--accent);
+  font-weight:500;
+  text-decoration:none;
+}
+
+.page-hero{text-align:center;padding:70px 20px}
+.page-hero h2{font-family:Playfair Display,serif;font-size:44px}
+.page-hero p{color:var(--accent);max-width:650px;margin:10px auto}
+
+section{padding:60px 40px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+  text-align:center;
+  padding-bottom:25px;
+  overflow:hidden;
+}
+
+.card img{width:100%;height:260px;object-fit:cover}
+.card h3{font-family:Playfair Display,serif;margin:20px 0 10px}
+.card p{font-size:14px;color:#666;padding:0 15px 15px}
+.price{font-weight:600;color:var(--accent);margin-bottom:15px}
+
+.card button{
+  background:var(--accent);
+  color:#fff;
+  border:0;
+  padding:12px 26px;
+  border-radius:25px;
+  cursor:pointer;
+}
+
+/* header cart pill */
+.cart-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.75);
+  color:var(--dark);
+  font-weight:700;
+  cursor:pointer;
+}
+.cart-count{
+  display:inline-flex;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:rgba(152,112,112,.14);
+  border:1px solid rgba(152,112,112,.22);
+  color:var(--accent);
+  font-weight:900;
+  font-size:12px;
+  line-height:1;
+}
+
+/* drawer */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+  z-index:90;
+}
+.overlay.open{opacity:1; pointer-events:auto;}
+
+.cart-drawer{
+  position:fixed;
+  top:0;
+  right:-420px;
+  width:min(420px, 92vw);
+  height:100vh;
+  background:rgba(255,255,255,.96);
+  border-left:1px solid var(--line);
+  box-shadow:-18px 0 40px rgba(0,0,0,.18);
+  z-index:100;
+  transition:right .25s ease;
+  display:flex;
+  flex-direction:column;
+  backdrop-filter: blur(10px);
+}
+.cart-drawer.open{ right:0; }
+
+.cart-head{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.cart-title{
+  margin:0;
+  font-size:16px;
+  font-weight:900;
+  color:var(--dark);
+}
+.close-btn{
+  border:1px solid var(--line);
+  background:rgba(152,112,112,.18);
+  color:var(--dark);
+  border-radius:999px;
+  padding:8px 10px;
+  font-weight:900;
+  cursor:pointer;
+}
+.cart-body{
+  padding:12px 14px;
+  overflow:auto;
+  flex:1;
+}
+.empty{
+  border:1px dashed rgba(48,25,1,.22);
+  border-radius:14px;
+  padding:14px;
+  color:rgba(48,25,1,.75);
+  background:rgba(152,112,112,.08);
+  font-weight:700;
+}
+.cart-item{
+  display:grid;
+  gap:10px;
+  padding:12px;
+  border:1px solid rgba(48,25,1,.14);
+  border-radius:16px;
+  background:rgba(152,112,112,.08);
+  margin-bottom:10px;
+}
+.ci-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+.ci-name{
+  margin:0;
+  font-weight:900;
+  color:var(--dark);
+  font-size:14px;
+  line-height:1.2;
+  flex:1;
+}
+.ci-price{
+  font-weight:900;
+  color:var(--accent);
+  white-space:nowrap;
+  font-size:14px;
+}
+.ci-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.qty{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid rgba(48,25,1,.18);
+  border-radius:999px;
+  overflow:hidden;
+  background:#fff;
+}
+.qty button{
+  border:0;
+  background:rgba(152,112,112,.16);
+  color:var(--dark);
+  font-weight:900;
+  padding:8px 10px;
+  cursor:pointer;
+}
+.qty span{
+  min-width:34px;
+  text-align:center;
+  font-weight:900;
+  color:var(--dark);
+  padding:0 10px;
+}
+.remove{
+  border:0;
+  background:transparent;
+  color:rgba(48,25,1,.75);
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:underline;
+}
+.remove:hover{color:var(--accent);}
+.cart-foot{
+  border-top:1px solid var(--line);
+  padding:12px 14px 14px;
+  background:rgba(152,112,112,.10);
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:6px 0;
+  color:var(--dark);
+  font-weight:800;
+}
+.row small{font-weight:700;color:rgba(48,25,1,.75)}
+.total{
+  font-size:16px;
+  font-weight:900;
+  color:var(--accent);
+}
+.cart-buttons{
+  display:grid;
+  gap:10px;
+  margin-top:10px;
+}
+.drawer-btn{
+  width:100%;
+  padding:12px 14px;
+  border-radius:14px;
+  border:2px solid rgba(48,25,1,.16);
+  background:#fff;
+  color:var(--dark);
+  font-weight:900;
+  cursor:pointer;
+}
+.drawer-btn.primary{
+  background:var(--accent);
+  border-color:rgba(152,112,112,.35);
+  color:#fff;
+}
+.drawer-btn.ghost{
+  background:transparent;
+  border:1px solid rgba(48,25,1,.18);
+}
+
+@media(max-width:768px){
+  header{padding:20px}
+  section{padding:40px 20px}
+}
+
+/* Footer */
+footer{
+  background: #987070;
+  color: var(--cream);
+  padding:40px 20px;
+  text-align:center;
+  font-size:14px;
+}
+footer a{color:var(--cream);margin:0 10px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Kyndle & Co.</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="explore.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+
+    <button class="cart-pill" id="openCartBtn" type="button" aria-haspopup="dialog" aria-controls="cartDrawer">
+      🛒 <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h2>Valentine's Collections</h2>
+  <p>Thoughtfully designed to bring warmth and beauty to your special occasion.</p>
+</div>
+
+<section>
+  <div class="grid">
+
+    <div class="card">
+      <img src="valbox1.png" alt="Valentine Set 1">
+      <h3>Valentine Set 1</h3>
+      <p>A special Valentines Day Box for your special partner</p>
+      <div class="price">$12</div>
+      <button onclick="addToCart('Valentine Set 1',12)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="valbox2.png" alt="Valentine Set 2">
+      <h3>Valentine Set 2</h3>
+      <p>For your baby.</p>
+      <div class="price">$18</div>
+      <button onclick="addToCart('Valentine Set 2',18)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="valbox3.png" alt="Valentine Set 3">
+      <h3>Valentine Set 3</h3>
+      <p>A special Valentines Day Box for your special partner</p>
+      <div class="price">$8</div>
+      <button onclick="addToCart('Valentine Set 3',8)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="valbox4.png" alt="Valentine Set 4">
+      <h3>Valentine Set 4</h3>
+      <p>A special Valentines Day Box for your special partner</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Valentine Set 4',25)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="valbox5.png" alt="Valentine Set 5">
+      <h3>Valentine Set 5</h3>
+      <p>A special Valentines Day Box for your special partner.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Valentine Set 5',25)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="valbox6.png" alt="Valentine Set 6">
+      <h3>Valentine Set 6</h3>
+      <p>A special Valentines Day Box for your special partner.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Valentine Set 6',25)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="hrtbox.png" alt="Valentine Mini hearts Box">
+      <h3>Valentine Mini hearts Box</h3>
+      <p>A special Valentines Day Box for your special partner.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Valentine Mini hearts Box',25)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="moonhrt.png" alt="Valentine's Moon with Mini hearts">
+      <h3>Valentine's Moon with Mini hearts</h3>
+      <p>A special Valentines Day Box for your special partner.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart(`Valentine's Moon with Mini hearts`,25)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="hrtcan.png" alt="Valentine's Tall candles with hearts">
+      <h3>Valentine's Tall candles with hearts</h3>
+      <p>A special Valentines Day Box for your special partner.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart(`Valentine's Tall candles with hearts`,25)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="canjar.png" alt="Valentine's Jars Candle with hearts">
+      <h3>Valentine's Jars Candle with hearts</h3>
+      <p>A special Valentines Day Box for your special partner.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart(`Valentine's Jars with hearts`,25)">Add to Cart</button>
+    </div>
+
+  </div>
+</section>
+
+<div class="overlay" id="overlay" aria-hidden="true"></div>
+
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Shopping cart">
+  <div class="cart-head">
+    <h3 class="cart-title">Your Cart</h3>
+    <button class="close-btn" id="closeCartBtn" type="button" aria-label="Close cart">✕</button>
+  </div>
+
+  <div class="cart-body">
+    <div class="empty" id="emptyState">
+      Your cart is empty. Click “Add to Cart” on a product to start shopping.
+    </div>
+    <div id="cartItems"></div>
+  </div>
+
+  <div class="cart-foot">
+    <div class="row"><small>Items</small> <span id="itemsCount">0</span></div>
+    <div class="row"><small>Subtotal</small> <span class="total" id="subtotal">$0.00</span></div>
+
+    <div class="cart-buttons">
+      <button class="drawer-btn ghost" id="clearCartBtn" type="button">Clear cart</button>
+      <button class="drawer-btn" type="button" onclick="location.href='mycart.html'">Go to My Cart</button>
+      <button class="drawer-btn primary" id="checkoutBtn" type="button">Checkout</button>
+    </div>
+  </div>
+</aside>
+
+<script>
+const CART_KEY = "kyndle_cart_v1";
+let cart = [];
+
+const $ = (sel) => document.querySelector(sel);
+
+const overlay = $("#overlay");
+const drawer = $("#cartDrawer");
+const openCartBtn = $("#openCartBtn");
+const closeCartBtn = $("#closeCartBtn");
+
+const cartCountEl = $("#cartCount");
+const itemsCountEl = $("#itemsCount");
+const subtotalEl = $("#subtotal");
+const cartItemsEl = $("#cartItems");
+const emptyStateEl = $("#emptyState");
+
+const clearCartBtn = $("#clearCartBtn");
+const checkoutBtn = $("#checkoutBtn");
+
+function loadCart(){
+  try{
+    const raw = localStorage.getItem(CART_KEY);
+    cart = raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(cart)) cart = [];
+  }catch{
+    cart = [];
+  }
+}
+function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+function money(n){ return "$" + Number(n).toFixed(2); }
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function totals(){
+  const items = cart.reduce((sum, it) => sum + it.qty, 0);
+  const subtotal = cart.reduce((sum, it) => sum + (it.qty * it.price), 0);
+
+  cartCountEl.textContent = String(items);
+  itemsCountEl.textContent = String(items);
+  subtotalEl.textContent = money(subtotal);
+
+  emptyStateEl.style.display = cart.length ? "none" : "block";
+}
+function renderCart(){
+  cartItemsEl.innerHTML = "";
+  cart.forEach((it) => {
+    const row = document.createElement("div");
+    row.className = "cart-item";
+    row.dataset.name = it.name;
+
+    row.innerHTML = `
+      <div class="ci-top">
+        <p class="ci-name">${escapeHtml(it.name)}</p>
+        <div class="ci-price">${money(it.price)}</div>
+      </div>
+
+      <div class="ci-actions">
+        <div class="qty">
+          <button type="button" data-action="dec">−</button>
+          <span>${it.qty}</span>
+          <button type="button" data-action="inc">+</button>
+        </div>
+
+        <div style="font-weight:900;color:var(--accent);">
+          ${money(it.qty * it.price)}
+        </div>
+
+        <button class="remove" type="button" data-action="remove">Remove</button>
+      </div>
+    `;
+    cartItemsEl.appendChild(row);
+  });
+
+  totals();
+}
+function openCart(){
+  overlay.classList.add("open");
+  drawer.classList.add("open");
+  overlay.setAttribute("aria-hidden", "false");
+}
+function closeCart(){
+  overlay.classList.remove("open");
+  drawer.classList.remove("open");
+  overlay.setAttribute("aria-hidden", "true");
+}
+function setQty(name, qty){
+  const it = cart.find(x => x.name === name);
+  if(!it) return;
+  it.qty = Math.max(1, qty);
+  saveCart();
+  renderCart();
+}
+function removeItem(name){
+  cart = cart.filter(x => x.name !== name);
+  saveCart();
+  renderCart();
+}
+function clearCart(){
+  cart = [];
+  saveCart();
+  renderCart();
+}
+function addToCart(name, price){
+  const found = cart.find(x => x.name === name);
+  if(found){ found.qty += 1; }
+  else { cart.push({ name, price: Number(price), qty: 1 }); }
+
+  saveCart();
+  renderCart();
+  openCart();
+}
+
+openCartBtn.addEventListener("click", openCart);
+closeCartBtn.addEventListener("click", closeCart);
+overlay.addEventListener("click", closeCart);
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && drawer.classList.contains("open")) closeCart();
+});
+
+cartItemsEl.addEventListener("click", (e) => {
+  const itemEl = e.target.closest(".cart-item");
+  if(!itemEl) return;
+
+  const btn = e.target.closest("button");
+  if(!btn) return;
+
+  const name = itemEl.dataset.name;
+  const action = btn.dataset.action;
+
+  const it = cart.find(x => x.name === name);
+  if(!it) return;
+
+  if(action === "inc") setQty(name, it.qty + 1);
+  if(action === "dec") setQty(name, it.qty - 1);
+  if(action === "remove") removeItem(name);
+});
+
+clearCartBtn.addEventListener("click", () => {
+  if(confirm("Clear all items from your cart?")) clearCart();
+});
+
+checkoutBtn.addEventListener("click", () => {
+  if(!cart.length){ alert("Your cart is empty."); return; }
+  window.location.href = "mycart.html";
+});
+
+loadCart();
+renderCart();
+</script>
+
+<footer>
+  <p>&copy; 2026 Kyndle & Co. All rights reserved.</p>
+  <p>
+    <a href="https://www.instagram.com/kyndleandco/" target="_blank">Instagram</a> |
+    <a href="ship.html">Shipping</a> |
+    <a href="contact.html">Contact us</a>
+  </p>
+</footer>
+
+</body>
+</html>
