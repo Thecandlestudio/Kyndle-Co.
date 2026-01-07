@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kyndle & Co | Shipping Information</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --cream:#F8F2E9;
+      --beige:#DCC3A6;
+      --amber:#C79B68;
+      --brown:#7A5C3E;
+  --dark:#301901ed;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:var(--cream);
+      color:var(--dark);
+      line-height:1.6;
+    }
+
+    a{text-decoration:none;color:inherit}
+
+    /* Header */
+    header{
+      background:var(--cream);
+      padding:20px 60px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid #987070;
+    }
+
+    header h1{
+      font-family:'Playfair Display',serif;
+      font-size:28px;
+      letter-spacing:1px;
+      color: #987070;
+    }
+
+    nav a{
+      margin-left:30px;
+      font-weight:500;
+      color: #987070;
+    }
+
+    /* Hero */
+    .page-hero{
+      text-align:center;
+      padding:80px 20px;
+      background:linear-gradient(rgba(248,242,233,0.92),rgba(248,242,233,0.92)),url('shipping-hero.jpg') center/cover no-repeat;
+    }
+
+    .page-hero h2{
+      font-family:'Playfair Display',serif;
+      font-size:44px;
+      margin-bottom:15px;
+    }
+
+    .page-hero p{
+      max-width:650px;
+      margin:auto;
+      font-size:18px;
+    }
+
+    section{
+      padding:80px 60px;
+    }
+
+    .shipping-box{
+      max-width:900px;
+      margin:auto;
+      background:white;
+      border-radius:30px;
+      padding:60px;
+      box-shadow:0 15px 35px rgba(0,0,0,0.06);
+      text-align:center;
+    }
+
+    .shipping-box h3{
+      font-family:'Playfair Display',serif;
+      font-size:30px;
+      margin-bottom:30px;
+    }
+
+    .rate{
+      font-size:20px;
+      margin-bottom:15px;
+      color:var(--brown);
+    }
+
+    .note{
+      margin-top:30px;
+      font-size:16px;
+      color:#555;
+    }
+
+    .contact-note{
+      margin-top:20px;
+      font-size:16px;
+    }
+
+    .contact-note a{
+      color: var(--dark) ;
+      font-weight:500;
+    }
+
+    /* Footer */
+    footer{
+      background: #987070 ;
+      color:var(--cream);
+      padding:40px 20px;
+      text-align:center;
+      font-size:14px;
+    }
+
+    footer a{color: var(--cream);margin:0 10px}
+
+    @media(max-width:768px){
+      header{padding:20px}
+      section{padding:60px 20px}
+      .shipping-box{padding:40px 25px}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Kyndle & Co.</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="explore.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h2>Shipping Information</h2>
+  <p>Everything you need to know about our delivery rates and timelines.</p>
+</div>
+
+<section>
+  <div class="shipping-box">
+    <h3>Shipping Rates</h3>
+
+    <p class="rate"><strong>Within Beirut:</strong> $3</p>
+    <p class="rate"><strong>Outside Beirut:</strong> $4</p>
+
+    <p class="note">Shipping may take <strong>3–5 business days</strong> inside Beirut and <strong>5–7 business days</strong> outside Beirut.</p>
+
+    <p class="contact-note">If you have any questions regarding shipping, feel free to <a href="contact.html">contact us</a> and we’ll be happy to help.</p>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Kyndle & Co. All rights reserved.</p>
+  <p>
+    <a href="https://www.instagram.com/kyndleandco/" target="_blank">Instagram</a> |
+    <a href="ship.html">Shipping</a> |
+    <a href="contact.html">Contact us</a>
+  </p>
+</footer>
+
+</body>
+</html>

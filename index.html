@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kyndle & Co | Hand‑Poured Candles</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --cream:#F8F2E9;
+      --beige:#DCC3A6;
+      --amber:#C79B68;
+      --brown:#7A5C3E;
+      --dark:#301901ed;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:var(--cream);
+      color:var(--dark);
+      line-height:1.6;
+    }
+
+    a{text-decoration:none;color:inherit}
+
+    /* Header */
+    header{
+      background:var(--cream);
+      padding:20px 60px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid #e6ddd2;
+    }
+
+    header h1{
+      font-family:'Playfair Display',serif;
+      font-size:28px;
+      letter-spacing:1px;
+     color:#987070;
+    }
+
+    nav a{
+      margin-left:30px;
+      font-weight:500;
+      color:  #987070;
+    }
+
+    /* Hero */
+    .hero{
+      padding:100px 20px;
+      text-align:center;
+      background:linear-gradient(rgba(248,242,233,0.9),rgba(248,242,233,0.9)),url('hero.jpg') center/cover no-repeat;
+    }
+
+    .hero h2{
+      font-family:'Playfair Display',serif;
+      font-size:48px;
+      margin-bottom:20px;
+       color:#987070;
+    }
+
+    .hero p{
+      max-width:600px;
+      margin:0 auto 40px;
+      font-size:18px;
+       color:#987070;
+    }
+
+    .btn{
+      background: #987070;
+      color:white;
+      padding:14px 32px;
+      border-radius:30px;
+      font-weight:500;
+      margin:10px;
+      display:inline-block;
+    }
+
+    .btn.alt{
+      background:transparent;
+      border:2px solid #987070;
+      color:#987070;
+    }
+
+    /* Section */
+    section{
+      padding:80px 60px;
+    }
+
+    section h3{
+      font-family:'Playfair Display',serif;
+      font-size:36px;
+      text-align:center;
+      margin-bottom:50px;
+      color:var(--dark);
+    }
+
+    /* Collections */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:30px;
+    }
+
+    .card{
+      background:white;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,0.05);
+      text-align:center;
+    }
+
+    .card img{
+      width:100%;
+      height:300px;
+      object-fit:cover;
+    }
+
+    .card h4{
+      font-family:'Playfair Display',serif;
+      font-size:22px;
+      margin:20px 0 10px;
+      color:var(--dark)
+    }
+
+    .card p{
+      padding:0 20px 20px;
+      font-size:14px;
+      color:#666;
+    }
+
+    /* About */
+    .about{
+      background: #987070;;
+      border-radius:30px;
+      padding:80px;
+      max-width:1100px;
+      margin:auto;
+      text-align:center;
+     
+    }
+
+    .about p{
+      max-width:800px;
+      margin:20px auto;
+      font-size:17px;
+     
+    }
+
+    /* Newsletter */
+    .newsletter{
+      text-align:center;
+      background:var(--dark);
+      color:white;
+      padding:80px 20px;
+    }
+
+    .newsletter input{
+      padding:14px 20px;
+      border-radius:30px;
+      border:none;
+      width:260px;
+      margin-right:10px;
+    }
+
+    .newsletter button{
+      padding:14px 30px;
+      border:none;
+      border-radius:30px;
+      background:var(--amber);
+      color:white;
+      font-weight:500;
+      cursor:pointer;
+    }
+
+    /* Footer */
+    footer{
+      background:#987070;;
+      color:var(--cream);
+      padding:40px 20px;
+      text-align:center;
+      font-size:14px;
+    }
+
+    footer a{color: var(--cream);margin:0 10px}
+
+    @media(max-width:768px){
+      header{padding:20px}
+      section{padding:60px 20px}
+      .about{padding:50px 30px}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Kyndle & Co.</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="explore.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Kyndle & Co.</h2>
+  <h3>Hand‑Poured Candles & Cozy Creations </h3>
+    <p>Warm, intentional candles crafted to elevate your everyday moments. Designed with care, poured with heart.</p>
+  <a href="#" class="btn">Customize</a>
+  <a href="explore.html" class="btn alt">Explore Collections</a>
+</section>
+
+<section>
+  <h3>Our Collections</h3>
+  <div class="grid">
+    <div class="card">
+      <img src="flor.png" alt="Cozy Classics">
+      <h4>Cozy Classics</h4>
+      <p>Timeless candles designed to bring comfort and calm into every space.</p>
+    </div>
+    <div class="card">
+      <img src="seas.png" alt="Seasonal Collection">
+      <h4>Seasonal Collection</h4>
+      <p>Limited‑edition scents inspired by the warmth of each season.</p>
+    </div>
+    <div class="card">
+      <img src="deco.png" alt="Sculpted Candles">
+      <h4>Sculpted Candles</h4>
+      <p>Decor‑worthy designs that blend art and ambiance.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="about">
+    <h3>About Kyndle & Co.</h3>
+    <p>Kyndle & Co is a small, heart‑driven candle studio dedicated to creating cozy, intentional moments. Each candle is hand‑poured with high‑quality wax and thoughtfully chosen scents to make your space feel like home.</p>
+    <p>Perfect for gifting, self‑care, and everyday warmth.</p>
+  </div>
+</section>
+
+
+<footer>
+  <p>&copy; 2026 Kyndle & Co. All rights reserved.</p>
+  <p>
+    <a href="https://www.instagram.com/kyndleandco/" target="_blank">Instagram</a> |
+    <a href="#">Shipping</a> |
+    <a href="contact.html">Contact Us</a>
+  </p>
+</footer>
+
+</body>
+</html>

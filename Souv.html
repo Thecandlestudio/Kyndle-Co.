@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kyndle & Co | Souvernirs</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#F8F2E9;
+  --accent:#987070;
+  --dark:#301901ed;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Poppins,sans-serif;
+  background:var(--cream);
+  color:var(--dark);
+}
+
+header{
+  padding:20px 60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e6ddd2;
+}
+
+header h1{
+  font-family:Playfair Display,serif;
+  color:var(--accent);
+  font-size:28px;
+}
+
+nav a{
+  margin-left:30px;
+  color:var(--accent);
+  font-weight:500;
+  text-decoration:none;
+}
+
+.page-hero{text-align:center;padding:70px 20px}
+.page-hero h2{font-family:Playfair Display,serif;font-size:44px}
+.page-hero p{color:var(--accent);max-width:650px;margin:10px auto}
+
+section{padding:60px 40px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+  text-align:center;
+  padding-bottom:25px;
+}
+
+.card img{width:100%;height:260px;object-fit:cover}
+.card h3{font-family:Playfair Display,serif;margin:20px 0 10px}
+.card p{font-size:14px;color:#666;padding:0 15px 15px}
+.price{font-weight:600;color:var(--accent);margin-bottom:15px}
+
+.card button{
+  background:var(--accent);
+  color:#fff;
+  border:0;
+  padding:12px 26px;
+  border-radius:25px;
+  cursor:pointer;
+}
+
+
+
+/* MINI CART */
+.cart{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#fff;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  width:260px;
+  display:none; /* hide cart initially */
+}
+
+
+.cart h4{font-family:Playfair Display,serif}
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:8px;
+}
+.total{
+  font-weight:600;
+  margin-top:10px;
+  border-top:1px solid #ddd;
+  padding-top:10px;
+}
+
+.go-to-cart{
+  width:100%;
+  margin-bottom:10px;
+  background:var(--accent);
+  color:#fff;
+  border:0;
+  padding:10px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+  header{padding:20px}
+  section{padding:40px 20px}
+  .cart{position:static;margin:20px auto}
+}
+
+   /* Footer */
+    footer{
+      background: #987070;
+      color: var(--cream);
+      padding:40px 20px;
+      text-align:center;
+      font-size:14px;
+      
+    }
+
+    footer a{color:var(--cream);margin:0 10px}
+
+    @media(max-width:768px){
+      header{padding:20px}
+      section{padding:60px 20px}
+    }
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Kyndle & Co.</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="explore.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h2>Souvenirs</h2>
+  <p>Thoughtfully designed to bring warmth and beauty to your special occasion.</p>
+</div>
+
+<section>
+  <div class="grid">
+
+    <div class="card">
+      <img src="Bearsouv.png">
+      <h3>Bear Souvenir</h3>
+      <p>Soft warm glow candle perfect for Iftar moments.</p>
+      <div class="price">$12</div>
+      <button onclick="addToCart('Moon Shaped Candle',12)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="suv2.png">
+      <h3>Baby Souvenirs</h3>
+      <p>For your baby.</p>
+      <div class="price">$18</div>
+      <button onclick="addToCart('Bouquet with Ramadan Sign',18)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="lant.png">
+      <h3>Plexi Set</h3>
+      <p>Beautiful Plexi customized for your special occasion.</p>
+      <div class="price">$8</div>
+      <button onclick="addToCart('Tasbih Set',8)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="bap.png">
+      <h3>Special Batism Souvenir</h3>
+      <p>Batism Souvenir gently crafted with care. Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Ramadan Gift Box',25)">Add to Cart</button>
+    </div>
+
+
+    <div class="card">
+      <img src="whiteflowers.png">
+      <h3>White flowers</h3>
+      <p>Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('White flowers',25)">Add to Cart</button>
+    </div>
+
+
+
+        <div class="card">
+      <img src="jarflow.png">
+      <h3>Candle Jar with Flower on Top</h3>
+      <p>Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Candle Jar with Flower on Top',25)">Add to Cart</button>
+    </div>
+
+
+
+        <div class="card">
+      <img src="colflo.png">
+      <h3>Colored Flowers</h3>
+      <p> Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Colored Flowers',25)">Add to Cart</button>
+    </div>
+
+
+
+        <div class="card">
+      <img src="cloud.png">
+      <h3>Mini Clouds Souvenir</h3>
+      <p>Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('cloud',25)">Add to Cart</button>
+    </div>
+
+      <div class="card">
+      <img src="molds.png">
+      <h3>Mini Resin Souvenir</h3>
+      <p>Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Mini Resin Souvenir',25)">Add to Cart</button>
+    </div>
+
+
+    <div class="card">
+      <img src="clov.png">
+      <h3>Clover Flower Souvenir</h3>
+      <p>Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('clover flower',25)">Add to Cart</button>
+    </div>
+
+      <div class="card">
+      <img src="hands.png">
+      <h3>Colorful Hands Souvenir</h3>
+      <p>Add a note to your order with name.</p>
+      <div class="price">$25</div>
+      <button onclick="addToCart('hands',25)">Add to Cart</button>
+    </div>
+
+
+  </div>
+</section>
+
+<div class="cart">
+  <h4>Your Cart</h4>
+  <button class="go-to-cart" onclick="location.href='mycart.html'">Go to My Cart</button>
+  <div id="cartItems"></div>
+  <div class="total">Total: $<span id="total">0.00</span></div>
+</div>
+
+<script>
+/* ===== CART STORAGE ===== */
+const CART_KEY = "kyndle_cart";
+
+function addToCart(name, price){
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+  const existing = cart.find(i => i.name === name);
+  if(existing){
+    existing.qty += 1;
+  }else{
+    cart.push({ name, price, qty:1 });
+  }
+
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateMiniCart();
+}
+
+/* ===== MINI CART ===== */
+function updateMiniCart(){
+  const cartItems = document.getElementById("cartItems");
+  const totalEl = document.getElementById("total");
+
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  cart.forEach(it=>{
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <span>${it.qty} × ${it.name}</span>
+        <span>$${(it.qty * it.price).toFixed(2)}</span>
+      </div>
+    `;
+    total += it.qty * it.price;
+  });
+
+  totalEl.textContent = total.toFixed(2);
+}
+
+/* INIT */
+updateMiniCart();
+
+
+/* ===== MINI CART ===== */
+function updateMiniCart(){
+  const cartEl = document.querySelector(".cart");
+  const cartItems = document.getElementById("cartItems");
+  const totalEl = document.getElementById("total");
+
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  
+  if(cart.length === 0){
+    cartEl.style.display = "none"; // hide if empty
+    return;
+  } else {
+    cartEl.style.display = "block"; // show if items exist
+  }
+
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  cart.forEach(it=>{
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <span>${it.qty} × ${it.name}</span>
+        <span>$${(it.qty * it.price).toFixed(2)}</span>
+      </div>
+    `;
+    total += it.qty * it.price;
+  });
+
+  totalEl.textContent = total.toFixed(2);
+}
+
+/* INIT */
+updateMiniCart();
+
+</script>
+
+
+<footer>
+  <p>&copy; 2026 Kyndle & Co. All rights reserved.</p>
+  <p>
+    <a href="https://www.instagram.com/kyndleandco/" target="_blank">Instagram</a> |
+    <a href="ship.html">Shipping</a> |
+    <a href="contact.html">Contact us</a>
+  </p>
+</footer>
+
+
+
+</body>
+</html>
